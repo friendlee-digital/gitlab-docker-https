@@ -1,6 +1,6 @@
 # About
 
-Hi this is an example config that would allow you to run your Gitlab instance on a VPS or VDS or any other standalone server of yours.
+Hi this is an example Docker Compose config that would allow you to run a Gitlab instance on a VPS or a VDS or any other standalone server of yours. Please pay attention to optimization config values. You can remove them but if you plan to use Gitlab for a small team then I'd suggest to keep them.
 
 Assuming that you have Docker installed. Steps to run your Gitlab:
 

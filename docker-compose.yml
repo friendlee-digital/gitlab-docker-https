@@ -25,6 +25,22 @@ services:
         letsencrypt['auto_renew_hour'] = "12"
         letsencrypt['auto_renew_minute'] = "30"
         letsencrypt['auto_renew_day_of_month'] = "*/7"
+
+        ### optimization https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html
+        puma['worker_processes'] = 0
+        sidekiq['max_concurrency'] = 10
+        prometheus_monitoring['enable'] = false
+        gitlab_rails['env'] = {'MALLOC_CONF' => 'dirty_decay_ms:1000, muzzy_decay_ms:1000'}
+        gitaly['cgroups_count'] = 2
+        gitaly['cgroups_mountpoint'] = '/sys/fs/cgroup'
+        gitaly['cgroups_hierarchy_root'] = 'gitaly'
+        gitaly['cgroups_memory_enabled'] = true
+        gitaly['cgroups_memory_bytes'] = 500000
+        gitaly['cgroups_cpu_enabled'] = true
+        gitaly['cgroups_cpu_shares'] = 512
+        gitaly['concurrency'] = [{'rpc' => "/gitaly.SmartHTTPService/PostReceivePack", 'max_per_repo' => 3}, {'rpc' => "/gitaly.SSHService/SSHUploadPack", 'max_per_repo' => 3}]
+        gitaly['env'] = {'LD_PRELOAD' => '/opt/gitlab/embedded/lib/libjemalloc.so', 'MALLOC_CONF' => 'dirty_decay_ms:1000,muzzy_decay_ms:1000', 'GITALY_COMMAND_SPAWN_MAX_PARALLEL' => '2'}
+        
     ports:
       - '80:80'
       - '443:443'
